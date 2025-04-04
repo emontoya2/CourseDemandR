@@ -1,3 +1,5 @@
+LD <- c("FS-OC", "FS-WC", "FS-CT", "FS-QR", "HIST-Req", "GV-Req", "LD-PHYS_SCI", "LD-BIO_SCI", "LD-ARTS", "LD-HUM", "LD-SBS", "LD-ES")  # lower division GE
+UD <- c("WRIT-Req", "DIV-Req", "UD-SCI", "UD-A&H", "UD-SBS") # upper division GE
 
 server <- function(input, output, session) {
   
@@ -106,9 +108,9 @@ server <- function(input, output, session) {
   # Pairwise GE Correlation Analysis for GE groups
   pairwiseResultsAll <- reactive({
     # Define GE groups
-    fs <- c("A1", "A2", "A3", "B4")         # foundational skills
-    ld <- c("AIAH", "AIGV", "B1", "B2", "C1", "C2", "DSEM", "F")  # lower division GE
-    ud <- c("GWAR", "JYDR", "UDB", "UDC", "UDD") # upper division GE
+    #fs <- c("A1", "A2", "A3", "B4")         # foundational skills
+    #ld <- c("AIAH", "AIGV", "B1", "B2", "C1", "C2", "DSEM", "F")  # lower division GE
+    #ud <- c("GWAR", "JYDR", "UDB", "UDC", "UDD") # upper division GE
     
     analyzeGroup <- function(areas, groupName) {
       df_sub <- combinedData %>% filter(Req_1 %in% areas) %>% droplevels()
@@ -131,7 +133,7 @@ server <- function(input, output, session) {
           r_val <- sqrt(r_squared) * sign(model_summary$estimate[2])
           
           regression_results[[paste(x, "->", y, sep = "_")]] <- data.frame(
-            GE_level = groupName,
+           #GE_level = groupName,
             GE_area1 = x,
             GE_area2 = y,
             P_Value = model_summary$p.value[2],
@@ -142,15 +144,14 @@ server <- function(input, output, session) {
       bind_rows(regression_results)
     }
     
-    fs_results <- analyzeGroup(fs, "fs")
-    ld_results <- analyzeGroup(ld, "ld")
-    ud_results <- analyzeGroup(ud, "ud")
+    ld_results <- analyzeGroup(LD, "LD")
+    ud_results <- analyzeGroup(UD, "UD")
     
     # Combine and filter results
-    bind_rows(fs_results, ld_results, ud_results) %>%
+    bind_rows(ld_results, ud_results) %>%
       filter(P_Value <= 0.15) %>%
       arrange(desc(abs(Correlation))) %>%
-      select(GE_level, GE_area1, GE_area2, P_Value, Correlation) %>%  
+      select(GE_area1, GE_area2, P_Value, Correlation) %>%  
       mutate_if(is.numeric, ~ round(.x, 2))
   })
   
@@ -198,8 +199,15 @@ server <- function(input, output, session) {
     req(input$simCourse, input$newSectionCount)
     # Use coursesData() to filter only by Term
     df <- coursesData() 
-    # Get the selected course
-    course <- df %>% filter(Course == input$simCourse) %>% slice(1)
+   
+    # Determine the latest term among the selected terms.
+    # This assumes that the Term variable sorts such that the latest term is the highest.
+    latestTerm <- sort(unique(df$Term), decreasing = TRUE)[1]
+    
+    # Filter the data to include only the latest term and the selected course
+    course <- df %>% 
+      filter(Term == latestTerm, Course == input$simCourse) %>% 
+      slice(1)
     if(nrow(course) == 0) {
       return(data.frame(Message = "Selected course not found in the selected Term(s)."))
     }
@@ -246,6 +254,12 @@ server <- function(input, output, session) {
     # Use coursesData() (with parentheses) to filter only by Term
     geCourses <- coursesData() %>% 
       filter(Req_1 == input$simGEarea | Req_2 == input$simGEarea)
+    
+    # Determine the latest term from the selected terms
+    latestTerm <- sort(unique(coursesData()$Term), decreasing = TRUE)[1]
+    
+    # Filter geCourses to only include data from the latest term
+    geCourses <- geCourses %>% filter(Term == latestTerm)
     
     if(nrow(geCourses) == 0) return(data.frame(Message = "No courses found for this GE area."))
     

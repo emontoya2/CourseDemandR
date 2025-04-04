@@ -1,6 +1,7 @@
 # Load required packages
 library(shiny)
 library(shinyjs)
+library(shinyBS)
 library(dplyr)
 library(ggplot2)
 library(DT)
@@ -10,7 +11,7 @@ library(ggrepel)
 library(reshape2)
 
 # Load data (assumes the CSV file has a 'term' column)
-combinedData <- read.csv("../data/GEsampledata.csv", stringsAsFactors = FALSE)# Data is assumed to be clean with the following variables:
+combinedData <- read.csv("data/GEsampledata.csv", stringsAsFactors = FALSE)# Data is assumed to be clean with the following variables:
 # College: The academic unit or college offering the course.
 # Course: The unique course identifier (typically a combination of subject and catalog number).
 # Subject: The academic discipline or department of the course.
@@ -31,3 +32,6 @@ combinedData <- read.csv("../data/GEsampledata.csv", stringsAsFactors = FALSE)# 
 combinedData <- combinedData %>%
   mutate_if(is.numeric, ~ round(.x, 2)) %>%
   filter(!is.na(Req_1))
+
+
+
