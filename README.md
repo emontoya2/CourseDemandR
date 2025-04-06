@@ -60,7 +60,7 @@ This will launch the app in your default web browser.
 
 ---
 
-### 📡 Optional: Run Online (No Installation Required)
+### Optional: Run Online (No Installation Required)
 
 You may also access the hosted version at:
 
