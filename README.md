@@ -1,12 +1,20 @@
-# `CourseDemandR`
+> Version: `v1.0.0`  •  License: [MIT](LICENSE)  •  [Zenodo Archive](https://doi.org/10.5281/zenodo.15163164)
 
-A Data-Driven Tool for General Education Enrollment: Statistical Analysis & Scenario Planning
+# CourseDemandR
+ 
+`CourseDemandR`  is a data-driven tool that supports general education enrollment through statistical modeling and scenario planning
+
+
+## Version Notice
+
+This version (`v1.0.0`) does not include the required sample CSV data file.   A future release (`v1.1.0`) will include an example dataset for demonstration and testing.  For more complete functionality, please use the most recent [archived version on Zenodo](https://doi.org/10.5281/zenodo.15163164).
+
 
 ## Local Deployment of `CourseDemandR`
 
 This section provides step-by-step instructions for running `CourseDemandR` locally using [R](https://cran.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/).
 
----
+
 
 ### Preliminaries
 
@@ -15,7 +23,6 @@ Ensure the following are installed on your machine:
 - **R** (version 4.0 or higher): [Download R](https://cran.r-project.org/)
 - **RStudio** (IDE for running Shiny apps): [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
 
----
 
 ### Step 1: Get the App Files
 
@@ -27,6 +34,8 @@ Ensure the following are installed on your machine:
 
 **Option 2: Clone via Git (for those familiar with Git)**
 
+`git clone https://github.com/emontoya2/CourseDemandR.git`
+
 
 
 ### Step 2: Open the App in RStudio
@@ -35,18 +44,17 @@ Ensure the following are installed on your machine:
 2. Navigate to the folder containing the app files  
 3. Open the `app.R` file or the `.Rproj` file (if available)
 
----
+
 
 ### Step 3: Install Required R Packages
 
 In the RStudio **Console**, run the following command to install dependencies:
 
-`install.packages(c("shiny", "shinyjs", "shinyBS" "tidyverse", "DT", "broom", "ggrepel", "reshape2"))`
-
+`install.packages(c("shiny", "shinyjs", "shinyBS", "tidyverse", "DT", "broom", "ggrepel", "reshape2"))`
 
 Additional packages may be installed dynamically on first run.
 
----
+
 
 ### Step 4: Launch the Application
 
@@ -58,7 +66,6 @@ Additional packages may be installed dynamically on first run.
 
 This will launch the app in your default web browser.
 
----
 
 ### Optional: Run Online (No Installation Required)
 
@@ -66,3 +73,18 @@ You may also access the hosted version at:
 
 [https://www.shinyapps.io/](https://www.shinyapps.io/) *(Not yet deployed on shinyapps -- to be linked)*
 
+
+## Data Requirements
+
+The application expects a structured CSV file with aggregate GE course enrollment data. Required columns include:
+
+- `College`, `Course`, `Subject`, `Catalog`, `Term`
+- `Avg_enrl`,  `crs_section_cnt`
+- `Avg_fill_rate`, `GEcapsize`, `Avg_cap_diff`
+- `Req_1`, `Req_2`
+
+A template dataset will be included in a future version (v1.1.0).
+
+## Citation
+
+Montoya, E. (2025). *CourseDemandR: An R Shiny App for General Education Curriculum Planning*. [Zenodo](https://doi.org/10.5281/zenodo.15163164)
