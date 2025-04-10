@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use CourseDemandR in your work, please cite it using the metadata below."
+title: "CourseDemandR: An R Shiny App for General Education Curriculum Planning"
+version: "1.1.0"
+doi: "10.5281/zenodo.15191359"
+date-released: 2024-04-10
+authors:
+  - family-names: Montoya
+    given-names: Eduardo
+    orcid: "https://orcid.org/0000-0001-5040-5063"    
+    affiliation: "California State University, Bakersfield"
+license: MIT
+repository-code: "https://github.com/emontoya2/CourseDemandR"
+url: "https://doi.org/10.5281/zenodo.15191359"
+keywords:
+  - R Shiny
+  - curriculum planning
+  - general education
+  - institutional research
+  - educational analytics
+  - higher education
+type: software
