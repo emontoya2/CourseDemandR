@@ -30,8 +30,7 @@ combinedData <- read.csv("data/GEsampledata.csv", stringsAsFactors = FALSE)# Dat
 
 # Some extra data preprocess for purpose of the app
 combinedData <- combinedData %>%
-  mutate_if(is.numeric, ~ round(.x, 2)) %>%
-  filter(!is.na(Req_1))
+  mutate_if(is.numeric, ~ round(.x, 2))  
 
 
 

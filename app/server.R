@@ -1,5 +1,5 @@
-LD <- c("FS-OC", "FS-WC", "FS-CT", "FS-QR", "HIST-Req", "GV-Req", "LD-PHYS_SCI", "LD-BIO_SCI", "LD-ARTS", "LD-HUM", "LD-SBS", "LD-ES")  # lower division GE
-UD <- c("WRIT-Req", "DIV-Req", "UD-SCI", "UD-A&H", "UD-SBS") # upper division GE
+#LD <- c("FS-OC", "FS-WC", "FS-CT", "FS-QR", "HIST-Req", "GV-Req", "LD-PHYS_SCI", "LD-BIO_SCI", "LD-ARTS", "LD-HUM", "LD-SBS", "LD-ES")  # lower division GE
+#UD <- c("WRIT-Req", "DIV-Req", "UD-SCI", "UD-A&H", "UD-SBS") # upper division GE
 
 server <- function(input, output, session) {
   
@@ -62,7 +62,7 @@ server <- function(input, output, session) {
     DT::datatable(
       filteredData()[, c("Term", "College", "Course", "Req_1", "Req_2", "Avg_fill_rate", 
                            "GEcapsize", "Avg_cap_diff", "Avg_enrl",  #"Median_fill_rate",
-                          "Crs_section_cnt")], # "Med_enrl", 
+                          "Crs_section_cnt", "GE_course_level")], # "Med_enrl", 
       options = list(pageLength = 10, autoWidth = TRUE),
       rownames = FALSE
     )
@@ -144,6 +144,9 @@ server <- function(input, output, session) {
       bind_rows(regression_results)
     }
     
+    
+    LD <- combinedData %>% filter(GE_course_level=="UD")%>%  pull(Req_1) %>% unique()
+    UD <- combinedData %>% filter(GE_course_level=="LD")%>%  pull(Req_1) %>% unique()
     ld_results <- analyzeGroup(LD, "LD")
     ud_results <- analyzeGroup(UD, "UD")
     

@@ -120,7 +120,7 @@ ui <- fluidPage(
                ),
                fluidRow(
                  column(12,
-                 h3("What-If Analysis Results"),
+                 h3("What-If Analysis Results -- for most recent term available"),
                  DT::dataTableOutput("simTable")
                  )
                )
@@ -152,7 +152,7 @@ ui <- fluidPage(
                # Output row:
                fluidRow(
                  column(12,
-                        h3("What-If Analysis Results"),
+                        h3("What-If Analysis Results  -- for most recent term available"),
                         DT::dataTableOutput("simGETable")
                  )
                )
@@ -194,7 +194,8 @@ ui <- fluidPage(
                tags$li(strong("Avg_cap_diff:"), "The average difference between GE course caps and department-set course caps."),
                tags$li(strong("Avg_enrl:"), "The average enrollment across all sections of the course."),
                #tags$li(strong("Med_enrl:"), "The median enrollment across all sections of the course."),
-               tags$li(strong("Crs_section_cnt:"), "The total number of sections offered for the course.")
+               tags$li(strong("Crs_section_cnt:"), "The total number of sections offered for the course."),
+               tags$li(strong("GE_course_level :"), "Course level of a General Education or graduation requirement course.")
              ),
              #
              bsCollapsePanel("Click here for more information about each tab",
