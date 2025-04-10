@@ -11,8 +11,9 @@ library(ggrepel)
 library(reshape2)
 
 # Load data  
-combinedData <- read.csv("data/GEsampledata.csv", stringsAsFactors = FALSE)# Data is assumed to be clean with the following variables:
+combinedData <- read.csv("data/GEsampledata.csv", stringsAsFactors = FALSE)# Data is assumed to be clean tidy data 
  
+
 # Some extra data preprocess for purpose of the app
 combinedData <- combinedData %>%
   mutate_if(is.numeric, ~ round(.x, 2))  

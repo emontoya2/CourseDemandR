@@ -1,237 +1,293 @@
-
+# Define UI for application
 ui <- fluidPage(
   useShinyjs(),
+  
+  # App Title
   titlePanel("A Data-Driven Tool for General Education Enrollment: Statistical Analysis & Scenario Planning"),
+  
+  # Main Tabset Panel containing all tabs
   tabsetPanel(
-    ##
+    
+    # Overview Tab  
     tabPanel("Overview",
              sidebarLayout(
                sidebarPanel(
-                 div(id = "resettableInputs",
-                     selectInput("Term", "Select Term(s):", 
-                                 choices = unique(combinedData$Term), 
-                                 selected = unique(combinedData$Term)[length(unique(combinedData$Term))], 
-                                 multiple = TRUE),
-                     selectInput("GEreq", "Select GE Requirement:", 
-                                 choices = NULL,  
-                                 selected = NULL, multiple = TRUE),
-                     selectInput("College", "Select College:", 
-                                 choices = NULL,  
-                                 selected = NULL, multiple = TRUE),
-                     selectInput("Subject", "Select Subject:", 
-                                 choices = NULL,  
-                                 selected = NULL, multiple = TRUE),
-                     sliderInput("rateA", "Average fill rate:", 
-                                 min = 0, max = 1,  
-                                 value = c(0, 1), step = 0.01)#,
-                     #sliderInput("rateB", "Median fill rate:", 
-                    #             min = 0, max = 1,  
-                    #             value = c(0, 1), step = 0.01)
+                 # Container for resettable input elements
+                 div(
+                   id = "resettableInputs",
+                   selectInput(
+                     inputId = "Term",
+                     label = "Select Term(s):",
+                     choices = unique(combinedData$Term),
+                     selected = tail(unique(combinedData$Term), 1),
+                     multiple = TRUE
+                   ),
+                   selectInput(
+                     inputId = "GEreq",
+                     label = "Select GE Requirement:",
+                     choices = NULL, 
+                     selected = NULL,
+                     multiple = TRUE
+                   ),
+                   selectInput(
+                     inputId = "College",
+                     label = "Select College:",
+                     choices = NULL, 
+                     selected = NULL,
+                     multiple = TRUE
+                   ),
+                   selectInput(
+                     inputId = "Subject",
+                     label = "Select Subject:",
+                     choices = NULL, 
+                     selected = NULL,
+                     multiple = TRUE
+                   ),
+                   sliderInput(
+                     inputId = "rateA",
+                     label = "Average fill rate:",
+                     min = 0,
+                     max = 1,
+                     value = c(0, 1),
+                     step = 0.01
+                   )
                  ),
-                 actionButton("resetBtn", "Reset App"),
-                 width = 2  # Makes the sidebar narrower
+                 # Reset button for the app
+                 actionButton(inputId = "resetBtn", label = "Reset App"),
+                 width = 2  # Narrow sidebar for better layout
                ),
                mainPanel(
+                 # Show GE Requirement Summary if a GE requirement is selected
                  conditionalPanel(
                    condition = "input.GEreq != null && input.GEreq.length > 0",
                    h3("GE Requirement Summary"),
-                   plotOutput("gePlot")
+                   plotOutput(outputId = "gePlot")
                  ),
                  h3("GE Courses"),
-                 DT::dataTableOutput("courseTable")
+                 DT::dataTableOutput(outputId = "courseTable")
                )
              )
-    ) ,
-    ##
+    ),
+    
+    # High Fill Rate Courses Tab 
     tabPanel("High Fill Rate Courses",
              fluidPage(
-               numericInput("highFillThreshold", "Fill Rate Threshold:", 
-                            value = 0.90, min = 0, max = 1, step = 0.01),
-               h3("Courses with Average Rate > the threshold"), #or Median Fill Rate
-               DT::dataTableOutput("highFillTable")
+               numericInput(
+                 inputId = "highFillThreshold",
+                 label = "Fill Rate Threshold:",
+                 value = 0.90,
+                 min = 0,
+                 max = 1,
+                 step = 0.01
+               ),
+               h3("Courses with Average Rate above Threshold"),
+               DT::dataTableOutput(outputId = "highFillTable")
              )
-    ) ,
-    ##
+    ),
+    
+    # Low Fill Rate Courses Tab  
     tabPanel("Low Fill Rate Courses",
              fluidPage(
-               numericInput("lowFillThreshold", "Fill Rate Threshold:", 
-                            value = 0.25, min = 0, max = 1, step = 0.01),
-               h3("Courses with Average Rate < the threshold"), #or Median Fill
-               DT::dataTableOutput("lowFillTable")
+               numericInput(
+                 inputId = "lowFillThreshold",
+                 label = "Fill Rate Threshold:",
+                 value = 0.25,
+                 min = 0,
+                 max = 1,
+                 step = 0.01
+               ),
+               h3("Courses with Average Rate below Threshold"),
+               DT::dataTableOutput(outputId = "lowFillTable")
              )
-    ) ,
-    ##
-    #tabPanel("Box Plot",
-    #         fluidPage(
-    #           h3("Box Plot: Average Fill Rate by College"),
-    #           plotOutput("boxPlot")
-    #         )
-    #),
-    ##
+    ),
+    
+    # Pairwise Correlation by GE Area Tab  
     tabPanel("Pairwise Correlation by GE Area",
              fluidPage(
                h3("Pairwise GE Correlation Analysis for Foundational Skills, Lower-Division GE, and Upper-Division GE -- across all Terms"),
-               bsCollapsePanel("Understanding GE Area Correlations",
-                               tags$div(
-                                 tags$p(
-                                   strong("Positive correlatoin:"),
-                                   "When two GE areas have a high positive correlation in fill rates, their enrollment patterns tend to move together. This may be due to interconnected factors such as student perceptions of both areas as enjoyable, essential, or manageable; advising practices, curricular pathways, or program structures that encourage simultaneous enrollment; degree requirements promoting concurrent course-taking; and capacity constraints (like limited course sections) that increase simultaneous demand."
-                                 ),
-                                 tags$p(
-                                   strong("Negative correlatoin:"),
-                                   "When one GE area experiences increased enrollments, while the other consistently shows decreased enrollments, it suggests an inverse relationship. This may be caused by factors such as advising practices or curricular pathways that discourage simultaneous enrollment; scheduling conflicts forcing students to choose between courses; prerequisite structures that enforce sequential enrollment; or contrasting student perceptions regarding difficulty, value, or relevance between the two GE areas."
-                                 )
-                               ),
-                               style = "primary"
+               bsCollapsePanel(
+                 title = "Understanding GE Area Correlations",
+                 tags$div(
+                   tags$p(
+                     strong("Positive correlation:"),
+                     " When two GE areas have a high positive correlation in fill rates, their enrollment patterns tend to move together. This may be due to interconnected factors such as curriculum design, advising practices, and capacity constraints."
+                   ),
+                   tags$p(
+                     strong("Negative correlation:"),
+                     " An inverse relationship indicates that as one GE area's enrollment increases, another’s decreases—possibly due to scheduling conflicts or differences in student perceptions."
+                   )
+                 ),
+                 style = "primary"
                ),
-               
-               
-               DT::dataTableOutput("pairwiseTable")
+               DT::dataTableOutput(outputId = "pairwiseTable")
              )
-    ) ,
-    ##
+    ),
+    
+    # GE Area Correlation Heatmap Tab  
     tabPanel("GE Area Correlation Heatmap",
              fluidPage(
                h3("Correlation of GE Area Fill Rates -- across all Terms"),
-               plotOutput("correlationHeatmap", height = "700px")
+               plotOutput(outputId = "correlationHeatmap", height = "700px")
              )
     ),
-    ##
+    
+    # What-If Analysis: Number of Sections Per Course  
     tabPanel("Number of Sections Per Course: A What-If Analysis",
              fluidPage(
-               # Single row for inputs arranged horizontally:
                fluidRow(
                  column(4,
-                        selectInput("simCourse", "Select Course for What-If Analysis:", 
-                             choices = sort(unique(combinedData$Course)))
+                        selectInput(
+                          inputId = "simCourse",
+                          label = "Select Course for What-If Analysis:",
+                          choices = sort(unique(combinedData$Course))
+                        )
                  ),
                  column(4,
-                        numericInput("newSectionCount", "New Section Count:", 
-                              value = 10, min = 1, step = 1)
+                        numericInput(
+                          inputId = "newSectionCount",
+                          label = "New Section Count:",
+                          value = 10,
+                          min = 1,
+                          step = 1
+                        )
                  ),
                  column(4,
-                        numericInput("newTotalEnrollment", "New Total Enrollment (optional):", 
-                              value = NA, min = 1, step = 1)
+                        numericInput(
+                          inputId = "newTotalEnrollment",
+                          label = "New Total Enrollment (optional):",
+                          value = NA,
+                          min = 1,
+                          step = 1
+                        )
                  )
                ),
-               # Add vertical space between the input row and the output row:
+               # Extra vertical spacing
                fluidRow(
                  column(12, tags$br(), tags$br())
                ),
                fluidRow(
                  column(12,
-                 h3("What-If Analysis Results -- for most recent term available"),
-                 DT::dataTableOutput("simTable")
-                 )
-               )
-               )
-             )  ,
-    ##
-    tabPanel("Number of Sections Per GE Area: A What-If Analysis",
-             fluidPage(
-               # Single row for inputs arranged horizontally:
-               fluidRow(
-                 column(4,
-                        selectInput("simGEarea", "Select GE Area for What-If Analysis:",
-                                    choices = sort(unique(c(combinedData$Req_1, combinedData$Req_2))),
-                                    selected = NULL)
-                 ),
-                 column(4,
-                        numericInput("newGESectionCount", "New Total Section Count for GE Area:", 
-                                     value = 10, min = 1, step = 1)
-                 ),
-                 column(4,
-                        numericInput("newGEEnrollment", "New Total Enrollment (optional):", 
-                                     value = NA, min = 1, step = 1)
-                 )
-               ),
-               # Add vertical space between the input row and the output row:
-               fluidRow(
-                 column(12, tags$br(), tags$br())
-               ),
-               # Output row:
-               fluidRow(
-                 column(12,
-                        h3("What-If Analysis Results  -- for most recent term available"),
-                        DT::dataTableOutput("simGETable")
+                        h3("What-If Analysis Results -- for Most Recent Term Available"),
+                        DT::dataTableOutput(outputId = "simTable")
                  )
                )
              )
-    ) ,
-    ##
+    ),
+    
+    # What-If Analysis: Number of Sections Per GE Area  
+    tabPanel("Number of Sections Per GE Area: A What-If Analysis",
+             fluidPage(
+               fluidRow(
+                 column(4,
+                        selectInput(
+                          inputId = "simGEarea",
+                          label = "Select GE Area for What-If Analysis:",
+                          choices = sort(unique(c(combinedData$Req_1, combinedData$Req_2))),
+                          selected = NULL
+                        )
+                 ),
+                 column(4,
+                        numericInput(
+                          inputId = "newGESectionCount",
+                          label = "New Total Section Count for GE Area:",
+                          value = 10,
+                          min = 1,
+                          step = 1
+                        )
+                 ),
+                 column(4,
+                        numericInput(
+                          inputId = "newGEEnrollment",
+                          label = "New Total Enrollment (optional):",
+                          value = NA,
+                          min = 1,
+                          step = 1
+                        )
+                 )
+               ),
+               # Extra vertical spacing
+               fluidRow(
+                 column(12, tags$br(), tags$br())
+               ),
+               fluidRow(
+                 column(12,
+                        h3("What-If Analysis Results -- for Most Recent Term Available"),
+                        DT::dataTableOutput(outputId = "simGETable")
+                 )
+               )
+             )
+    ),
+    
+    # Section Count vs. Fill Rate Tab  
     tabPanel("Section Count vs. Fill Rate",
              fluidPage(
                h3("Relationship Between Number of Sections and Fill Rate"),
-               bsCollapsePanel("Trend Information",
-                               tags$div(
-                                 tags$p(
-                                   strong("Positive trend?"),
-                                   " A positive trend means that increasing the number of sections is associated with higher average fill rates. More sections coincide with higher per-section enrollment relative to capacity, suggesting strong demand."
-                                 ),
-                                 tags$p(
-                                   strong("Negative trend?"),
-                                   " A negative trend means that as the number of sections increases, the average fill rate decreases. This indicates that adding sections dilutes enrollment because the total number of students does not increase proportionally."
-                                 )
-                               ),
-                               style = "primary"
+               bsCollapsePanel(
+                 title = "Trend Information",
+                 tags$div(
+                   tags$p(
+                     strong("Positive trend?"),
+                     " Increasing the number of sections may lead to higher average fill rates, suggesting strong demand."
+                   ),
+                   tags$p(
+                     strong("Negative trend?"),
+                     " Conversely, more sections could dilute enrollment, resulting in a lower fill rate if total enrollment doesn’t scale proportionately."
+                   )
+                 ),
+                 style = "primary"
                ),
-               
-               plotOutput("sectionVsFillPlot", height = "500px")
+               plotOutput(outputId = "sectionVsFillPlot", height = "500px")
              )
     ),
-    ##
+    
+    # Variable Definitions & App Info Tab - 
     tabPanel("Variable Definitions & App Info",
-             h3("Definitions of variables displayed in the Shiny app"),
-             tags$ul(
-               tags$li(strong("Term:"), " Semester Term."),
-               tags$li(strong("College:"), "The college within the institution."),
-               tags$li(strong("Course:"), "Subject and catalog number."),
-               tags$li(strong("Req_1:"), "GE requirement fulfilled by the course."),
-               tags$li(strong("Req_2:"), "Second GE requirement fulfilled by the course."),
-               tags$li(strong("Avg_fill_rate:"), "The ratio of average enrollment to the course capacity based on GE course caps."),
-               #tags$li(strong("Median_fill_rate:"), "The ratio of median enrollment to the course capacity based on GE course caps."),
-               tags$li(strong("GEcapsize:"), "GE course caps."),
-               tags$li(strong("Avg_cap_diff:"), "The average difference between GE course caps and department-set course caps."),
-               tags$li(strong("Avg_enrl:"), "The average enrollment across all sections of the course."),
-               #tags$li(strong("Med_enrl:"), "The median enrollment across all sections of the course."),
-               tags$li(strong("Crs_section_cnt:"), "The total number of sections offered for the course."),
-               tags$li(strong("GE_course_level :"), "Course level of a General Education or graduation requirement course.")
-             ),
-             #
-             bsCollapsePanel("Click here for more information about each tab",
-                             tags$div(
-                               tags$p(
-                                 strong("Overview:"),
-                                 "Displays a detailed table of GE course information and provides filtering inputs (e.g., Term, GE requirement, College, Subject, and fill rate range) in a sidebar. If GE requirements are selected, a bar chart summarizing subjects for the selected GE requirements is displayed."
-                               ),
-                               tags$p(
-                                 strong("High and Low Fill Rate Courses:"),
-                                 "Lets you set a fill rate threshold, and displays a table listing courses with an average fill rate above (or below if Low Fill Rate Courses tab) the threshold."
-                               ),
-                               tags$p(
-                               strong("Pairwise Correlation by GE Area:"),
-                               "Presents an analysis of pairwise correlations between GE areas by division-level grouping (Lower-Division GE and Upper-Division GE) across all terms. This tab includes an expandable section explaining what positive and negative correlations may indicate, and the results are displayed in a data table."
-                               ),
-                               tags$p(
-                               strong("GE Area Correlation Heatmap:"),
-                               "Shows a heatmap visualization of the sample correlation matrix for GE area fill rates across all terms."
-                               ),
-                               tags$p(
-                              strong("Number of Sections Per Course: A What-If Analysis:"),
-                                 "Allows you to assess changes by selecting a specific course and modifying its section count (and optionally, total enrollment). It then displays the recalculated average enrollment and fill rate based on the new section count (and, if provided, total enrollment)."
-                                ),
-                              tags$p(
-                               strong("Number of Sections Per GE Area: A What-If Analysis:"),
-                                  "Allows you to assess changes for an entire GE area by selecting the GE area and modifying the total section count (and optionally, total enrollment). It then displays the recalculated average enrollment and fill rate for the selected GE area."
-                               ),
-                              tags$p(
-                                strong("Section Count vs. Fill Rate:"),
-                                  "Visualizes the relationship between the number of sections per course and the average fill rate. A scatter plot with a regression trend line is provided, along with explanatory information about positive and negative trends."
-                               )
-                              ),
-                             style = "primary"
-                       )
-             
+             fluidPage(
+               h3("Definitions of Variables Displayed in the App"),
+               tags$ul(
+                 tags$li(strong("Term:"), " Semester Term."),
+                 tags$li(strong("College:"), "The college within the institution."),
+                 tags$li(strong("Course:"), "Subject and catalog number."),
+                 tags$li(strong("Req_1:"), "GE requirement fulfilled by the course."),
+                 tags$li(strong("Req_2:"), "Second GE requirement fulfilled by the course."),
+                 tags$li(strong("Avg_fill_rate:"), "The ratio of average enrollment to the course capacity based on GE course caps."),
+                 tags$li(strong("GEcapsize:"), "GE course caps."),
+                 tags$li(strong("Avg_cap_diff:"), "The average difference between GE course caps and department-set course caps."),
+                 tags$li(strong("Avg_enrl:"), "The average enrollment across all sections of the course."),
+                 tags$li(strong("Crs_section_cnt:"), "The total number of sections offered for the course."),
+                 tags$li(strong("GE_course_level:"), "Course level of a GE or graduation requirement course.")
+               ),
+               bsCollapsePanel(
+                 title = "More Information About Each Tab",
+                 tags$div(
+                   tags$p(
+                     strong("Overview:"), 
+                     " Detailed GE course information with filtering options and summary visualizations."
+                   ),
+                   tags$p(
+                     strong("High and Low Fill Rate Courses:"), 
+                     " Displays courses filtered by fill rate thresholds."
+                   ),
+                   tags$p(
+                     strong("Pairwise Correlation by GE Area:"), 
+                     " Analyzes and tabulates correlations between different GE areas."
+                   ),
+                   tags$p(
+                     strong("GE Area Correlation Heatmap:"), 
+                     " Visualizes the correlation matrix of GE area fill rates."
+                   ),
+                   tags$p(
+                     strong("What-If Analyses:"), 
+                     " Allows scenario planning by modifying section counts and enrollments at course and GE area levels."
+                   ),
+                   tags$p(
+                     strong("Section Count vs. Fill Rate:"), 
+                     " Illustrates the trend between the number of course sections and the average fill rate."
+                   )
+                 ),
+                 style = "primary"
+               )
+             )
     )
   )
 )
