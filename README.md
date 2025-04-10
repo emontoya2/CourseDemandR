@@ -1,18 +1,26 @@
-> Version: `v1.0.0`  •  License: [MIT](LICENSE)  •  [Zenodo Archive](https://doi.org/10.5281/zenodo.15163164)
+> Version: `v1.1.0`  •  License: [MIT](LICENSE)  •  [Zenodo Archive](https://doi.org/10.5281/zenodo.15163164)
 
 # CourseDemandR
  
-`CourseDemandR`  is a data-driven tool that supports general education enrollment through statistical modeling and scenario planning
+**CourseDemandR**  is a data-driven tool that supports general education enrollment through statistical modeling and scenario planning
 
 
-## Version Notice
+## Version 1.1.0 – Release Notes
 
-This version (`v1.0.0`) does not include the required sample CSV data file.   A future release (`v1.1.0`) will include an example dataset for demonstration and testing.  For more complete functionality, please use the most recent [archived version on Zenodo](https://doi.org/10.5281/zenodo.15163164).
+- Added sample CSV dataset
+- README updated with full instructions
+- App now runs locally with included sample data
 
 
-## Local Deployment of `CourseDemandR`
 
-This section provides step-by-step instructions for running `CourseDemandR` locally using [R](https://cran.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/).
+### Notes
+
+This version supersedes `v1.0.0`, which lacked the dataset required to run the app locally.  
+Recommended for all new users and reviewers.
+
+## Local Deployment of **CourseDemandR**
+
+This section provides step-by-step instructions for running **CourseDemandR** locally using [R](https://cran.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/).
 
 
 
@@ -81,9 +89,9 @@ The application expects a structured CSV file with aggregate GE course enrollmen
 - `College`, `Course`, `Subject`, `Catalog`, `Term`
 - `Avg_enrl`,  `crs_section_cnt`
 - `Avg_fill_rate`, `GEcapsize`, `Avg_cap_diff`
-- `Req_1`, `Req_2`
+- `GE_course_level`, `Req_1`, `Req_2`
 
-A template dataset will be included in a future version (v1.1.0).
+A sample dataset is included with this release for demonstration.
 
 ## Citation
 
