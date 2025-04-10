@@ -1,4 +1,4 @@
-> Version: `v1.1.0`  •  License: [MIT](LICENSE)  •  [Zenodo Archive](https://doi.org/10.5281/zenodo.15191359)
+> **Version**: v1.1.0  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15191359](https://doi.org/10.5281/zenodo.15191359)
 
 # CourseDemandR
  
