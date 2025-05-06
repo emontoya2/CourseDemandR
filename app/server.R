@@ -1,12 +1,30 @@
 server <- function(input, output, session) {
   
+  # Read user file or fallback
+  dataSource <- reactive({
+    if (is.null(input$file1)) {
+      combinedData
+    } else {
+      # read.csv will infer factors; adjust as needed
+      read.csv(input$file1$datapath, stringsAsFactors = FALSE)
+    }
+  })
+  
+  
   # Reactive Data Subset Based on Selected Terms
+  #coursesData <- reactive({
+  #     req(input$Term)
+  #     dataSource() %>% filter(Term %in% input$Term) %>%
+  #  mutate(Subject = sub("-.*", "", Course))
+  #})
+  
   coursesData <- reactive({
     req(input$Term)
-    combinedData %>% filter(Term %in% input$Term) %>%
-    # Create a new Subject variable from Course but assumes Course format "SUBJECT-XXXX"
-    mutate(Subject = sub("-.*", "", Course))
+    dataSource() %>%                                            #  uploaded or-default data
+      filter(Term %in% input$Term) %>%
+      mutate(Subject = sub("-.*", "", Course))
   })
+  
   
   # Update UI Inputs When 'Term' Changes
   observe({
@@ -17,9 +35,19 @@ server <- function(input, output, session) {
     updateSelectInput(session, "College", choices = sort(unique(df$College)))
     updateSelectInput(session, "Subject", choices = sort(unique(df$Subject)))
     
+
+    #populate simGEarea from uploaded  
+    updateSelectInput(
+      session, "simGEarea",
+      choices = sort(unique(c(df$Req_1, df$Req_2))),
+      selected = character(0)
+    )
+    
     # Update slider maximum for Average Fill Rate based on current data
     maxAvg <- round(max(df$Avg_fill_rate, na.rm = TRUE), 2)
     updateSliderInput(session, "rateA", max = maxAvg, value = c(0, maxAvg))
+
+    
   })
   
   # Filter Data According to Multiple User Inputs
@@ -105,9 +133,12 @@ server <- function(input, output, session) {
   # Pairwise GE Correlation Analysis
   pairwiseResultsAll <- reactive({
     
+     
     # Function to analyze correlations within a group of GE areas
     analyzeGroup <- function(areas, groupName) {
-      df_sub <- combinedData %>% filter(Req_1 %in% areas) %>% droplevels()
+      df_sub <- dataSource() %>%filter(Req_1 %in% areas) %>% droplevels() ##
+      
+      #browser()          # debug
       
       df_summary <- df_sub %>%
         group_by(Term, Req_1) %>%
@@ -140,8 +171,8 @@ server <- function(input, output, session) {
     }
     
     # Define GE areas for lower and upper divisions based on GE_course_level
-    LD <- combinedData %>% filter(GE_course_level == "UD") %>% pull(Req_1) %>% unique()
-    UD <- combinedData %>% filter(GE_course_level == "LD") %>% pull(Req_1) %>% unique()
+    LD <- dataSource() %>% filter(GE_course_level == "LD") %>% pull(Req_1) %>% unique() ##
+    UD <- dataSource() %>% filter(GE_course_level == "UD") %>% pull(Req_1) %>% unique() ##
     
     ld_results <- analyzeGroup(LD, "LD")
     ud_results <- analyzeGroup(UD, "UD")
@@ -166,7 +197,7 @@ server <- function(input, output, session) {
   # GE Area Correlation Heatmap
   output$correlationHeatmap <- renderPlot({
     # Step 1: Summarize average fill rates per GE area per Term
-    df_wide <- combinedData %>%
+    df_wide <- dataSource() %>%
       filter(!is.na(Req_1)) %>%
       group_by(Term, Req_1) %>%
       summarise(Avg_fill_rate = mean(Avg_fill_rate, na.rm = TRUE), .groups = "drop") %>%

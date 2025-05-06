@@ -12,6 +12,16 @@ ui <- fluidPage(
     tabPanel("Overview",
              sidebarLayout(
                sidebarPanel(
+                 
+                 # Option to upload CSV file. 
+                 fileInput(
+                   inputId = "file1",
+                   label   = "Upload your GE data (CSV)",
+                   accept  = c(".csv")
+                 ),
+                 helpText("If no file is uploaded, the app will use the built-in dataset."),
+                 
+                 
                  # Container for resettable input elements
                  div(
                    id = "resettableInputs",
