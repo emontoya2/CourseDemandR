@@ -14,14 +14,20 @@ library(reshape2)
 combinedData <- read.csv("data/GEsampledata.csv", stringsAsFactors = FALSE)# Data is assumed to be clean tidy data 
  
 
-# Some extra data preprocess for purpose of the app
+# Some extra data preprocess for the app
 combinedData <- combinedData %>% 
+  filter(Avg_enrl!=0)%>% 
   mutate( Avg_fill_rate= Avg_enrl/GEcapsize ) %>%
   mutate(Avg_cap_diff = GEcapsize - Avg_capenrl) %>%
-   mutate_if(is.numeric, ~ round(.x, 2))  %>%
-  mutate(across(where(is.character), as.factor)) 
-
-
- 
+  group_by( Term, Req_1)   %>%          # under each term for each GE area…
+  mutate(
+    GE_avg_fill   = mean(Avg_fill_rate, na.rm = TRUE) # …compute the area’s avg fill
+  ) %>%
+  ungroup() %>%
+  mutate(
+    Rel_GE_fill_rate = Avg_fill_rate / GE_avg_fill     # course’s rate / area’s rate
+  )  %>%
+  mutate_if(is.numeric, ~ round(.x, 2))  %>%
+  mutate(across(where(is.character), as.factor))    
 
  

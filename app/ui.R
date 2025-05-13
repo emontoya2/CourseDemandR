@@ -307,7 +307,9 @@ ui <- fluidPage(
                  tags$li(strong("Avg_cap_diff:"), "The average difference between GE course caps and department-set course caps."),
                  tags$li(strong("Avg_enrl:"), "The average enrollment across all sections of the course."),
                  tags$li(strong("Crs_section_cnt:"), "The total number of sections offered for the course."),
-                 tags$li(strong("GE_course_level:"), "Course level of a GE or graduation requirement course.")
+                 tags$li(strong("GE_course_level:"), "Course level of a GE or graduation requirement course."),
+                 tags$li(strong("GE_avg_fill:"), "Course level of a GE or graduation requirement course."),
+                 tags$li(strong("Rel_GE_fill_rate:"), "The ratio of a given GE course's average fill rate to the average fill rate of all courses in the same GE area during the same term.")
                ),
                bsCollapsePanel(
                  title = "More Information About Each Tab",

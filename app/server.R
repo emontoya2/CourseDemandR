@@ -97,7 +97,7 @@ server <- function(input, output, session) {
       filteredData()[, c(
         "Term", "College", "Course", "Req_1", "Req_2", "Avg_fill_rate", 
         "GEcapsize", "Avg_cap_diff", "Avg_enrl", "Crs_section_cnt", 
-        "GE_course_level")],
+        "GE_course_level", "GE_avg_fill", "Rel_GE_fill_rate")],
       options = list(pageLength = 10, autoWidth = TRUE),
       rownames = FALSE
     )
@@ -109,7 +109,7 @@ server <- function(input, output, session) {
     DT::datatable(
       df[, c(
         "Term", "College", "Course", "Req_1", "Req_2", "Avg_fill_rate", 
-        "GEcapsize", "Avg_cap_diff", "Avg_enrl", "Crs_section_cnt")],
+        "GEcapsize", "Avg_cap_diff", "Avg_enrl", "Crs_section_cnt", "Rel_GE_fill_rate")],
       filter = "top",
       options = list(pageLength = 10, autoWidth = TRUE),
       rownames = FALSE
@@ -122,7 +122,7 @@ server <- function(input, output, session) {
     DT::datatable(
       df[, c(
         "Term", "College", "Course", "Req_1", "Req_2", "Avg_fill_rate", 
-        "GEcapsize", "Avg_cap_diff", "Avg_enrl", "Crs_section_cnt")],
+        "GEcapsize", "Avg_cap_diff", "Avg_enrl", "Crs_section_cnt", "Rel_GE_fill_rate")],
       filter = "top",
       options = list(pageLength = 10, autoWidth = TRUE),
       rownames = FALSE
