@@ -380,7 +380,7 @@ server <- function(input, output, session) {
   output$fillRateTimePlot <- renderPlot({
     req(input$timeCourses)
     
-    # Pull in all terms 
+    #  Pull in all terms
     df_plot <- dataSource() %>%
       filter(Course %in% input$timeCourses) %>%
       group_by(Term, Course) %>%
@@ -394,7 +394,7 @@ server <- function(input, output, session) {
         SeasonOrder = ifelse(substr(Term, 1, 1) == "S", 1, 2)
       )
     
-    # Need correct time ordered levels
+    # Use correct time ordered levels
     term_levels <- df_plot %>%
       distinct(Term, Year, SeasonOrder) %>%
       arrange(Year, SeasonOrder) %>%
@@ -405,7 +405,7 @@ server <- function(input, output, session) {
     # Plot with both points and connecting lines
     ggplot(df_plot, aes(x = Term, y = Avg_fill_rate,
                         color = Course, group = Course)) +
-      geom_line() +
+      geom_line() +                                       
       geom_point(size = 3) +
       labs(
         title = "Course Fill Rate Over Time",
@@ -416,9 +416,71 @@ server <- function(input, output, session) {
       theme(
         axis.text.x     = element_text(angle = 45, hjust = 1, size=12),
         axis.text.y  = element_text(size = 12),    
-        legend.title    = element_blank()
+        legend.title    = element_blank(),
+        legend.text     = element_text(size = 12)      
       )
   })
+  
+  
+  # Populate the GE-area selector across all terms
+  observe({
+    df_all <- dataSource()
+    updateSelectInput(
+      session, "timeReqs",
+      choices  = sort(unique(df_all$Req_1)),
+      selected = NULL
+    )
+  })
+  
+  # create scatterplot of rate vs time
+  output$fillRateReqPlot <- renderPlot({
+    req(input$timeReqs)
+    
+    # filter full data by chosen GE areas
+    df_plot <- dataSource() %>%
+      filter(Req_1 %in% input$timeReqs) %>%
+      group_by(Term, Req_1) %>%
+      summarise(
+        Avg_fill_rate = mean(Avg_fill_rate, na.rm = TRUE),
+        .groups       = "drop"
+      ) %>%
+      # 2) extract Year & season order for true chronology
+      mutate(
+        Year        = as.integer(paste0("20", substr(Term, 2, 3))),
+        SeasonOrder = ifelse(substr(Term, 1, 1) == "S", 1, 2)
+      )
+    
+    # build factor levels: F22, S23, F23, S24, etc.
+    term_levels <- df_plot %>%
+      distinct(Term, Year, SeasonOrder) %>%
+      arrange(Year, SeasonOrder) %>%   
+      pull(Term)
+    
+    df_plot$Term <- factor(df_plot$Term, levels = term_levels)
+    
+    # plot with lines + points
+    ggplot(df_plot, aes(
+      x     = Term,
+      y     = Avg_fill_rate,
+      color = Req_1,
+      group = Req_1
+    )) +
+      geom_line() +                      
+      geom_point(size = 3) +
+      labs(
+        title = "Fill Rate Over Time by GE Requirement",
+        x     = "Term",
+        y     = "Average Fill Rate"
+      ) +
+      theme_minimal() +
+      theme(
+        axis.text.x     = element_text(angle = 45, hjust = 1, size=12),
+        axis.text.y  = element_text(size = 12),    
+        legend.title    = element_blank(),
+        legend.text     = element_text(size = 12)      
+      )
+  })
+  
   
   # Reset Inputs When Reset Button is Pressed
   observeEvent(input$resetBtn, {

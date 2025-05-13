@@ -111,7 +111,7 @@ ui <- fluidPage(
              )
     ),
     
-  
+    
     # Pairwise Correlation by GE Area Tab  
     tabPanel("Pairwise Correlation by GE Area",
              fluidPage(
@@ -237,12 +237,16 @@ ui <- fluidPage(
                  title = "Trend Information",
                  tags$div(
                    tags$p(
-                     strong("Positive trend?"),
+                     strong("Positive linear trend?"),
                      " Increasing the number of sections may lead to higher average fill rates, suggesting strong demand."
                    ),
                    tags$p(
-                     strong("Negative trend?"),
+                     strong("Negative linear trend?"),
                      " Conversely, more sections could dilute enrollment, resulting in a lower fill rate if total enrollment doesn’t scale proportionately."
+                   ),
+                   tags$p(
+                     strong("Note: "),
+                     "Course popularity (or lack thereof) may hinge on factors other than capacity: time-of-day preferences, instructor assignments, or prerequisite structures."
                    )
                  ),
                  style = "primary"
@@ -253,7 +257,7 @@ ui <- fluidPage(
     
     ## fill rates over time for courses
     tabPanel(
-      "Fill Rate Over Time",
+      "Fill Rate by Course Over Time",
       sidebarLayout(
         sidebarPanel(
           selectInput(
@@ -266,6 +270,24 @@ ui <- fluidPage(
         ),
         mainPanel(
           plotOutput("fillRateTimePlot", height = "500px")
+        )
+      )
+    ),
+    
+    tabPanel(
+      "Fill Rate by GE Area Over Time",
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            inputId  = "timeReqs",
+            label    = "Select GE Requirement(s):",
+            choices  = NULL,        # populated in server.R
+            multiple = TRUE
+          ),
+          helpText("Pick one or more GE areas to see fill‐rate trends over time.")
+        ),
+        mainPanel(
+          plotOutput("fillRateReqPlot", height = "500px")
         )
       )
     ),
