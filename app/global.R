@@ -15,8 +15,13 @@ combinedData <- read.csv("data/GEsampledata.csv", stringsAsFactors = FALSE)# Dat
  
 
 # Some extra data preprocess for purpose of the app
-combinedData <- combinedData %>%
-  mutate_if(is.numeric, ~ round(.x, 2))  
+combinedData <- combinedData %>% 
+  mutate( Avg_fill_rate= Avg_enrl/GEcapsize ) %>%
+  mutate(Avg_cap_diff = GEcapsize - Avg_capenrl) %>%
+   mutate_if(is.numeric, ~ round(.x, 2))  %>%
+  mutate(across(where(is.character), as.factor)) 
 
 
+ 
 
+ 

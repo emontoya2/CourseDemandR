@@ -31,7 +31,7 @@ server <- function(input, output, session) {
     df <- coursesData()
     
     # Update selectInput choices dynamically
-    updateSelectInput(session, "GEreq", choices = sort(unique(df$GEreq)))
+    updateSelectInput(session, "GEreq", choices = sort(unique(df$Req_1)))
     updateSelectInput(session, "College", choices = sort(unique(df$College)))
     updateSelectInput(session, "Subject", choices = sort(unique(df$Subject)))
     
@@ -364,6 +364,50 @@ server <- function(input, output, session) {
         axis.text.y = element_text(size = 12)
       )
   })
+  
+  
+  
+  # Populate course selector from the full dataset, not just filtered by Term
+  observe({
+    df_all <- dataSource()
+    updateSelectInput(
+      session, "timeCourses",
+      choices  = sort(unique(df_all$Course)),
+      selected = NULL
+    )
+  })
+
+  output$fillRateTimePlot <- renderPlot({
+    req(input$timeCourses)
+    
+    df_plot <- dataSource() %>%
+      filter(Course %in% input$timeCourses) %>%
+      group_by(Term, Course) %>%
+      summarise(
+        Avg_fill_rate = mean(Avg_fill_rate, na.rm = TRUE),
+        .groups       = "drop"
+      )
+    
+    # Keep chronological order of Term
+    df_plot$Term <- factor(
+      df_plot$Term,
+      levels = sort(unique(dataSource()$Term))
+    )
+    
+    ggplot(df_plot, aes(x = Term, y = Avg_fill_rate, color = Course, group = Course)) +
+      geom_line(size = 2) +       #   connects the points
+      geom_point(size = 4) +      labs(
+        title = "Course Fill Rate Over Time (all terms)",
+        x     = "Term",
+        y     = "Average Fill Rate"
+      ) +
+      theme_minimal() +
+      theme(
+        axis.text.x  = element_text(angle = 45, hjust = 1),
+        legend.title = element_blank()
+      )
+  })
+  
   
   # Reset Inputs When Reset Button is Pressed
   observeEvent(input$resetBtn, {

@@ -111,6 +111,7 @@ ui <- fluidPage(
              )
     ),
     
+  
     # Pairwise Correlation by GE Area Tab  
     tabPanel("Pairwise Correlation by GE Area",
              fluidPage(
@@ -248,6 +249,25 @@ ui <- fluidPage(
                ),
                plotOutput(outputId = "sectionVsFillPlot", height = "500px")
              )
+    ),
+    
+    ## fill rates over time for courses
+    tabPanel(
+      "Fill Rate Over Time",
+      sidebarLayout(
+        sidebarPanel(
+          selectInput(
+            inputId  = "timeCourses",
+            label    = "Select Course(s):",
+            choices  = NULL,        # we’ll populate this in server.R
+            multiple = TRUE
+          ),
+          helpText("Pick one or more courses to see their fill‐rate over time.")
+        ),
+        mainPanel(
+          plotOutput("fillRateTimePlot", height = "500px")
+        )
+      )
     ),
     
     # Variable Definitions & App Info Tab - 
