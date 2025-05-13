@@ -388,7 +388,7 @@ server <- function(input, output, session) {
         Avg_fill_rate = mean(Avg_fill_rate, na.rm = TRUE),
         .groups       = "drop"
       ) %>%
-      # 2. Parse out a numeric “year” and a season order (Spring = 1, Fall = 2)
+      #  Parse out a numeric “year” and a season order (Spring = 1, Fall = 2)
       mutate(
         Year        = as.integer(paste0("20", substr(Term, 2, 3))),
         SeasonOrder = ifelse(substr(Term, 1, 1) == "S", 1, 2)
@@ -405,7 +405,7 @@ server <- function(input, output, session) {
     # Plot with both points and connecting lines
     ggplot(df_plot, aes(x = Term, y = Avg_fill_rate,
                         color = Course, group = Course)) +
-      geom_line() +                                       # connect the dots **[geom_line 🖌️](https://www.google.com/search?q=ggplot2+geom_line)**
+      geom_line() +
       geom_point(size = 3) +
       labs(
         title = "Course Fill Rate Over Time",
