@@ -72,7 +72,7 @@ This will launch the app in your default web browser.
 
 You may also access the hosted version at:
 
-[https://emontoya2.shinyapps.io/coursedemandr/](hhttps://emontoya2.shinyapps.io/coursedemandr/)  
+[https://emontoya2.shinyapps.io/coursedemandr/](https://emontoya2.shinyapps.io/coursedemandr/)  
 
 
 ## Data Requirements
