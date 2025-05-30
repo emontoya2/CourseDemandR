@@ -1,19 +1,20 @@
 server <- function(input, output, session) {
-  # Read user file or fallback
+  # Read user file 
   dataSource <- reactive({
-    combinedData <- if (is.null(input$file1)) {
+    df <- if (is.null(input$file1)) {
       combinedData
     } else {
       # Only CSV files will be read
       read.csv(input$file1$datapath, stringsAsFactors = FALSE)
     }
 
-    prepData(combinedData)
+    validate_data(df)
+    prepData(df)
   })
 
   coursesData <- reactive({
     req(input$Term)
-    dataSource() %>% #  uploaded or-default data
+    dataSource() %>% #  Uploaded or default data
       filter(Term %in% input$Term) %>%
       mutate(Subject = sub("-.*", "", Course))
   })
@@ -131,7 +132,7 @@ server <- function(input, output, session) {
         filter(Req_1 %in% areas) %>%
         droplevels() ##
 
-      # browser()          # debug
+      # browser()           
 
       df_summary <- df_sub %>%
         group_by(Term, Req_1) %>%
@@ -488,6 +489,14 @@ server <- function(input, output, session) {
 
   # Reset inputs when reset button is pressed
   observeEvent(input$resetBtn, {
-    reset("resettableInputs")
+    updateSelectInput(session, "Term",
+                      choices  = unique(combinedData$Term),
+                      selected = tail(unique(combinedData$Term), 1)
+    )
+    updateSelectInput(session, "GEreq",   selected = character(0))
+    updateSelectInput(session, "College", selected = character(0))
+    updateSelectInput(session, "Subject", selected = character(0))
+    updateSliderInput(session, "rateA", value = c(0, 1))
   })
+  
 }

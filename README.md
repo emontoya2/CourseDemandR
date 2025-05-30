@@ -1,19 +1,20 @@
-> **Version**: v1.2.0  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15191359](https://doi.org/10.5281/zenodo.15428178)
+> **Version**: v1.3.0  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.<your-new-doi>](https://doi.org/10.5281/zenodo.<your-new-doi>)
 
 # CourseDemandR
  
 **CourseDemandR**  is a data-driven tool that supports general education enrollment through statistical modeling and scenario planning
 
-## Version 1.2.0 – Release Notes
+## Version 1.3.0 – Release Notes
 
-- Now supports user-uploaded CSV datasets with base variables; derived metrics are computed dynamically by the app
-- Two new metrics and two additional plots added for deeper exploration of fill rates
-- Improved code documentation and inline comments for better maintainability
-- Updated README.md and sample dataset to reflect new functionality
+- **Add data‐validation pre‐check** (`validate_data.R`):  
+	- Ensures required columns (`Term`, `College`, `Course`, etc.) are present
+	- Checks for no missing values and enforces numeric ≥ 0 in key fields
+	- Logs outcomes to `validation_log.txt`  
+- Fix minor UI reset issues so filter inputs reliably return to their defaults  
 
 ### Notes
 
-This version supersedes v1.1.0, which required precomputed variables and supported only the built-in dataset.
+This version supersedes v1.2.0, which supported user uploads but did not utilize data validation.
 
 ## Local Deployment of **CourseDemandR**
 
@@ -24,7 +25,7 @@ This section provides step-by-step instructions for running **CourseDemandR** lo
 
 Ensure the following are installed on your machine:
 
-- **R** (version 4.0 or higher): [Download R](https://cran.r-project.org/)
+- **R** (version 4.4.2 or higher): [Download R](https://cran.r-project.org/)
 - **RStudio** (IDE for running Shiny apps): [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
 
 
@@ -84,6 +85,8 @@ The application expects a structured CSV file with aggregate GE course enrollmen
 - `GEcapsize`,  `Req_1`, `Req_2`
 
 A sample dataset is included with this release for demonstration.
+
+> **Note:** On launch or upload, the app now runs `validate_data.R` to verify your CSV matches the expected schema (required columns, no NAs, numeric ≥ 0). Any violations will be logged in `validation_log.txt`.
 
 ## Citation
 

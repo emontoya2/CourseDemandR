@@ -17,6 +17,9 @@ combinedData <- read.csv("data/GEsampledata.csv", stringsAsFactors = FALSE)
 # 'Avg_enrl' 'GEcapsize' 'Avg_capenrl' 'Crs_section_cnt'. See the app
 # for description of each variable.
 
+# Source validation function
+source("R/validate_data.R")
+
 # Function to process the data for the app
 prepData <- function(df) {
   df %>%

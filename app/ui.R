@@ -24,7 +24,7 @@ ui <- fluidPage(
 
 
           # Container for resettable input elements
-          div(
+           div(
             id = "resettableInputs",
             selectInput(
               inputId = "Term",
