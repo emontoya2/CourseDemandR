@@ -1,4 +1,4 @@
-> **Version**: v1.3.0  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.<your-new-doi>](https://doi.org/10.5281/zenodo.<your-new-doi>)
+> **Version**: v1.3.0  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15557906](https://doi.org/10.5281/zenodo.15557906)
 
 # CourseDemandR
  
@@ -90,4 +90,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E. (2025). *CourseDemandR: An R Shiny App for General Education Curriculum Planning*. [Zenodo](https://doi.org/10.5281/zenodo.15428178)
+Montoya, E. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning (v1.3.0). Zenodo. https://doi.org/10.5281/zenodo.15557906
