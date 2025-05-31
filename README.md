@@ -2,6 +2,9 @@
 
 # CourseDemandR
  
+[![Data Validation CI](https://github.com/emontoya2/CourseDemandR/actions/workflows/validate-data.yml/badge.svg)](https://github.com/emontoya2/CourseDemandR/actions/workflows/validate-data.yml)
+
+
 **CourseDemandR**  is a data-driven tool that supports general education enrollment through statistical modeling and scenario planning
 
 ## Version 1.3.0 – Release Notes
@@ -90,4 +93,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning (v1.3.0). Zenodo. https://doi.org/10.5281/zenodo.15557906
+Montoya, E. (2025). CourseDemandR: A Statistical Analysis and Scenario-Based Planning Tool for General Education Enrollment (v1.3.0). Zenodo. https://doi.org/10.5281/zenodo.15557906
