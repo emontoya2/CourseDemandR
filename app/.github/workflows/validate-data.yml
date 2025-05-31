@@ -1,0 +1,45 @@
+name: Validate Data
+
+# 1. Trigger: on push or PR to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-data:
+    # 2. Use the latest Ubuntu runner
+    runs-on: ubuntu-latest
+
+    steps:
+      # 3a. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 3b. Set up R (installs latest stable R)
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      # 3c. (Optional) Install any required R packages
+      # If validate_data.R uses packages like readr or dplyr, uncomment below.
+      - name: Install R packages
+        if: false   # set to 'true' or remove this line if you need packages
+        run: |
+          Rscript -e "install.packages(
+            c('readr','dplyr'),
+            repos='https://cloud.r-project.org'
+          )"
+
+      # 3d. Run data validation
+      - name: Run data validation
+        run: |
+          Rscript -e "
+            df <- read.csv(
+              'app/data/GEsampledata.csv',
+              stringsAsFactors = FALSE
+            )
+            source('app/R/validate_data.R')
+          "
