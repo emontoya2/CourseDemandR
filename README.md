@@ -93,4 +93,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E. (2025). CourseDemandR: A Statistical Analysis and Scenario-Based Planning Tool for General Education Enrollment (v1.3.0). Zenodo. https://doi.org/10.5281/zenodo.15557906
+Montoya, E. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning  (v1.3.0). Zenodo. https://doi.org/10.5281/zenodo.15557906
