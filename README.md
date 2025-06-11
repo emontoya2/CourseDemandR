@@ -1,4 +1,4 @@
-> **Version**: v1.3.1  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15557906](https://doi.org/10.5281/zenodo.15557906)
+> **Version**: v1.3.1  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15637017](https://doi.org/10.5281/zenodo.15637017)
 
 # CourseDemandR
  
@@ -10,7 +10,7 @@
 ## Version 1.3.0 – Release Notes
 
 - **Consolidated tabs**:  
-  - *What-If Analysis* now merges “Sections per Course” and “Sections per GE Area” scenarios  
+  - *What-If Analysis* now merges "Sections per Course" and "Sections per GE Area" scenarios  
   - *Fill Rates Over Time* merges course-level and GE-area time-series plots  
 - Minor bug fixes related to data upload.
 
@@ -92,4 +92,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning  (v1.3.1). Zenodo. https://doi.org/10.5281/zenodo.15557906
+Montoya, E. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning  (v1.3.1). Zenodo. https://doi.org/10.5281/zenodo.15637017
