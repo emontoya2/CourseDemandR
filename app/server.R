@@ -41,7 +41,7 @@ server <- function(input, output, session) {
     updateSliderInput(session, "rateA", max = maxAvg, value = c(0, maxAvg))
   })
 
-  # Filter Data According to Multiple User Inputs
+  # Filter data according to multiple user inputs
   filteredData <- reactive({
     df <- coursesData()
 
@@ -70,41 +70,48 @@ server <- function(input, output, session) {
       summarise(count = sum(Crs_section_cnt, na.rm = TRUE))
 
     ggplot(summaryData, aes(x = Subject, y = count, fill = Subject)) +
-      geom_bar(stat = "identity") +
+      geom_bar(stat = "identity", width = 0.3) +
+      scale_y_continuous(
+        breaks = seq(
+          from = 0,
+          to   = max(summaryData$count, na.rm = TRUE),
+          by   = 10          # control step
+        )
+      ) +
       labs(
-        title = "Count of Subjects for Selected GE Requirement(s)",
+        title = "Course section counts for selected GE requirement(s)",
         x = "Subject", y = "Count"
       ) +
       theme_minimal() +
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1, size = 14),
+        axis.title.x      = element_text(size = 16),  
+        axis.title.y      = element_text(size = 16),  
         legend.text = element_text(size = 14)
       )
   })
 
-  # GE Courses Data Table
+  # GE courses data table
   output$courseTable <- DT::renderDataTable({
     DT::datatable(
       filteredData()[, c(
         "Term", "College", "Course", "Req_1", "Req_2", "Avg_fill_rate",
-        "GEcapsize", "Avg_cap_diff", "Avg_enrl", "Crs_section_cnt",
-        "GE_course_level", "GE_avg_fill", "Rel_GE_fill_rate"
+        "GEcapsize", "Avg_cap_diff",   "Crs_section_cnt",  "GE_avg_fill", "Rel_GE_fill_rate"
       )],
       options = list(pageLength = 10, autoWidth = TRUE),
       rownames = FALSE
     )
   })
 
-  # High Fill Rate Courses Table
+  # High fill rate courses table
   output$highFillTable <- DT::renderDataTable({
     df <- filteredData() %>% filter(Avg_fill_rate > input$highFillThreshold)
     DT::datatable(
       df[, c(
-        "Term", "College", "Course", "Req_1", "Req_2", "Avg_fill_rate",
-        "GEcapsize", "Avg_cap_diff", "Avg_enrl", "Crs_section_cnt", "Rel_GE_fill_rate"
+        "Term",  "Course", "Req_1", "Req_2", "Avg_fill_rate",   "GE_avg_fill", "Crs_section_cnt"  
       )],
       filter = "top",
-      options = list(pageLength = 10, autoWidth = TRUE),
+      options = list(pageLength = 10, autoWidth = T ),
       rownames = FALSE
     )
   })
@@ -114,11 +121,10 @@ server <- function(input, output, session) {
     df <- filteredData() %>% filter(Avg_fill_rate < input$lowFillThreshold)
     DT::datatable(
       df[, c(
-        "Term", "College", "Course", "Req_1", "Req_2", "Avg_fill_rate",
-        "GEcapsize", "Avg_cap_diff", "Avg_enrl", "Crs_section_cnt", "Rel_GE_fill_rate"
+        "Term",  "Course", "Req_1", "Req_2", "Avg_fill_rate",   "GE_avg_fill", "Crs_section_cnt"  
       )],
       filter = "top",
-      options = list(pageLength = 10, autoWidth = TRUE),
+      options = list(pageLength = 10, autoWidth = T ),
       rownames = FALSE
     )
   })
@@ -196,7 +202,7 @@ server <- function(input, output, session) {
 
   # GE Area Correlation Heatmap
   output$correlationHeatmap <- renderPlot({
-    # Step 1: Summarize average fill rates per GE area per Term
+    # Summarize average fill rates per GE area per Term
     df_wide <- dataSource() %>%
       filter(!is.na(Req_1)) %>%
       group_by(Term, Req_1) %>%
@@ -229,7 +235,7 @@ server <- function(input, output, session) {
   })
 
   
-  # What-If Analysis: Course-Level Simulation
+  # What-If Analysis: Course-Level Sim
   simulatedData <- reactive({
     req(input$simCourse, input$newSectionCount)
 
@@ -277,12 +283,12 @@ server <- function(input, output, session) {
   output$simTable <- DT::renderDataTable({
     DT::datatable(
       simulatedData(),
-      options = list(pageLength = 5, autoWidth = TRUE),
+      options = list(pageLength = 5, autoWidth = T ),
       rownames = FALSE
     )
   })
 
-  # What-If Analysis: GE Area-Level Simulation
+  # What-If Analysis: GE Area-Level Sim  
   simGEData <- reactive({
     req(input$simGEarea, input$newGESectionCount)
 
@@ -334,7 +340,7 @@ server <- function(input, output, session) {
   output$simGETable <- DT::renderDataTable({
     DT::datatable(
       simGEData(),
-      options = list(pageLength = 5, autoWidth = TRUE),
+      options = list(pageLength = 5, autoWidth = T ),
       rownames = FALSE
     )
   })
@@ -364,7 +370,9 @@ server <- function(input, output, session) {
       theme_minimal(base_size = 14) +
       theme(
         axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12)
+        axis.text.y = element_text(size = 12),
+        axis.title.x      = element_text(size = 16),      
+        axis.title.y      = element_text(size = 16)
       )
   })
 
@@ -421,7 +429,9 @@ server <- function(input, output, session) {
       theme(
         axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
         axis.text.y = element_text(size = 12),
-        legend.title = element_blank(),
+        axis.title.x      = element_text(size = 16),  
+        axis.title.y      = element_text(size = 16),       
+         legend.title = element_blank(),
         legend.text = element_text(size = 12)
       )
   })
@@ -479,8 +489,10 @@ server <- function(input, output, session) {
       ) +
       theme_minimal() +
       theme(
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+        axis.text.x = element_text(angle = 45, hjust = 1, size = 14),
         axis.text.y = element_text(size = 12),
+        axis.title.x      = element_text(size = 16),      
+        axis.title.y      = element_text(size = 16),       
         legend.title = element_blank(),
         legend.text = element_text(size = 12)
       )

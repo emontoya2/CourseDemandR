@@ -1,4 +1,4 @@
-> **Version**: v1.3.0  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15557906](https://doi.org/10.5281/zenodo.15557906)
+> **Version**: v1.3.1  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15557906](https://doi.org/10.5281/zenodo.15557906)
 
 # CourseDemandR
  
@@ -9,15 +9,14 @@
 
 ## Version 1.3.0 – Release Notes
 
-- **Add data‐validation pre‐check** (`validate_data.R`):  
-	- Ensures required columns (`Term`, `College`, `Course`, etc.) are present
-	- Checks for no missing values and enforces numeric ≥ 0 in key fields
-	- Logs outcomes to `validation_log.txt`  
-- Fix minor UI reset issues so filter inputs reliably return to their defaults  
+- **Consolidated tabs**:  
+  - *What-If Analysis* now merges “Sections per Course” and “Sections per GE Area” scenarios  
+  - *Fill Rates Over Time* merges course-level and GE-area time-series plots  
+- Minor bug fixes related to data upload.
 
 ### Notes
 
-This version supersedes v1.2.0, which supported user uploads but did not utilize data validation.
+This version supersedes v1.3.0, which introduced data-validation pre-checks and minor UI bug fixes. 
 
 ## Local Deployment of **CourseDemandR**
 
@@ -93,4 +92,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning  (v1.3.0). Zenodo. https://doi.org/10.5281/zenodo.15557906
+Montoya, E. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning  (v1.3.1). Zenodo. https://doi.org/10.5281/zenodo.15557906
