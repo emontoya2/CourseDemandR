@@ -7,7 +7,7 @@
 
 **CourseDemandR**  is a data-driven tool that supports general education enrollment through statistical modeling and scenario planning
 
-## Version 1.3.0 – Release Notes
+## Version 1.3.1 – Release Notes
 
 - **Consolidated tabs**:  
   - *What-If Analysis* now merges "Sections per Course" and "Sections per GE Area" scenarios  
