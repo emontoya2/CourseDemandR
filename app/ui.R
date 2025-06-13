@@ -253,7 +253,7 @@ ui <- fluidPage(
             ),
             tags$p(
               strong("Note: "),
-              "Fill-rate patterns can also reflect meeting times, instructor reputation, or prerequisite chains."
+              "Course popularity (or lack thereof) may hinge on factors other than capacity: time-of-day preferences, instructor assignments, or prerequisite structures."
             )
       
           ),
