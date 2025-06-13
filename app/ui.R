@@ -236,17 +236,26 @@ ui <- fluidPage(
           title = "Trend Information",
           tags$div(
             tags$p(
+              strong("Flat, high line?"),
+              " A stable high fill rate as sections increase shows capacity is matching demand."
+            ),
+            tags$p(
+              strong("Flat, low line?"),
+              " A stable low fill rate as sections increase shows demand is weak or seats per section are set too high."
+            ),
+            tags$p(
               strong("Positive linear trend?"),
-              " Increasing the number of sections may lead to higher average fill rates, suggesting strong demand."
+              " Demand is climbing faster than capacity. Each new section fills, so more sections may still be needed."
             ),
             tags$p(
               strong("Negative linear trend?"),
-              " Conversely, more sections could dilute enrollment, resulting in a lower fill rate if total enrollment doesn’t scale proportionately."
+              " Sections are growing faster than demand. Average fill rate drops, signaling overscheduling."
             ),
             tags$p(
               strong("Note: "),
-              "Course popularity (or lack thereof) may hinge on factors other than capacity: time-of-day preferences, instructor assignments, or prerequisite structures."
+              "Fill-rate patterns can also reflect meeting times, instructor reputation, or prerequisite chains."
             )
+      
           ),
           style = "primary"
         ),
