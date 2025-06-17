@@ -77,6 +77,9 @@ You may also access the hosted version at:
 
 [https://emontoya2.shinyapps.io/coursedemandr/](https://emontoya2.shinyapps.io/coursedemandr/)  
 
+## Reproducible Environment
+
+Full R session details are recorded in [`docs/sessionInfo.txt`](docs/sessionInfo.txt).
 
 ## Data Requirements
 
