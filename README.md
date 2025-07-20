@@ -5,7 +5,7 @@
 [![Data Validation CI](https://github.com/emontoya2/CourseDemandR/actions/workflows/validate-data.yml/badge.svg)](https://github.com/emontoya2/CourseDemandR/actions/workflows/validate-data.yml)
 
 
-**CourseDemandR**  is a data-driven tool that supports general education enrollment through statistical modeling and scenario planning
+**CourseDemandR**  is a data-driven tool that supports General Education curriculum Planning through statistical modeling and scenario planning
 
 ## Version 1.3.1 – Release Notes
 
