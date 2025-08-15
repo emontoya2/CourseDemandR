@@ -68,7 +68,6 @@ Additional packages may be installed dynamically on first run.
 
 `shiny::runApp()`
 
-
 This will launch the app in your default web browser.
 
 ### Optional: Run Online (No Installation Required)
@@ -95,4 +94,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning  (v1.3.1). Zenodo. https://doi.org/10.5281/zenodo.15637017
+Montoya, E.L. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning  (v1.3.1). Zenodo. https://doi.org/10.5281/zenodo.15637017
