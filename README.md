@@ -1,4 +1,4 @@
-> **Version**: v1.3.1  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15637017](https://doi.org/10.5281/zenodo.15637017)
+> **Version**: v1.3.2  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15637017](https://doi.org/10.5281/zenodo.15637017)
 
 # CourseDemandR
  
@@ -7,16 +7,19 @@
 
 **CourseDemandR**  is a data-driven tool that supports General Education curriculum Planning through statistical modeling and scenario planning
 
-## Version 1.3.1 – Release Notes
+## Version 1.3.2 – Release Notes
 
-- **Consolidated tabs**:  
-  - *What-If Analysis* now merges "Sections per Course" and "Sections per GE Area" scenarios  
-  - *Fill Rates Over Time* merges course-level and GE-area time-series plots  
-- Minor bug fixes related to data upload.
+- **Correlation Heatmap Tooltips**  
+  - Added hover tooltips to the GE Area correlation heatmap showing the pairwise GE areas and Pearson correlation value.
+  - Sample size (number of terms) now appears in the heatmap title for interpretability.
+
+- **Interactive Cross-Tab Filtering**  
+  - Clicking on a point in the *Section Count vs. Fill Rate by Course* plot now filters the Overview tab by Subject.
+  - Enables dashboard-style drilldowns.
 
 ### Notes
 
-This version supersedes v1.3.0, which introduced data-validation pre-checks and minor UI bug fixes. 
+This version builds on v1.3.1 by adding interactive diagnostics and cross-panel linking. It does not change the app’s required input structure.
 
 ## Local Deployment of **CourseDemandR**
 
@@ -56,7 +59,7 @@ Ensure the following are installed on your machine:
 
 In the RStudio **Console**, run the following command to install dependencies:
 
-`install.packages(c("shiny", "shinyjs", "shinyBS", "tidyverse", "DT", "broom", "ggrepel", "reshape2"))`
+`install.packages(c("shiny", "shinyjs", "shinyBS", "tidyverse", "DT", "broom", "ggrepel", "reshape2", "plotly"))`
 
 Additional packages may be installed dynamically on first run.
 
@@ -94,4 +97,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E.L. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning  (v1.3.1). Zenodo. https://doi.org/10.5281/zenodo.15637017
+Montoya, E.L. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning (v1.3.2). Zenodo. https://doi.org/10.5281/zenodo.15637017

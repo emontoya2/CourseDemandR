@@ -32,7 +32,7 @@ server <- function(input, output, session) {
     # Populate simGEarea from uploaded
     updateSelectInput(
       session, "simGEarea",
-      choices = sort(unique(c(df$Req_1, df$Req_2))),
+      choices = sort(unique(c(df$Req_1))), # all levels in Req_2 are in Req_1
       selected = character(0)
     )
 
@@ -92,8 +92,8 @@ server <- function(input, output, session) {
   })
 
   # GE courses data table
-  output$courseTable <- DT::renderDataTable({
-    DT::datatable(
+  output$courseTable <- renderDataTable({
+    datatable(
       filteredData()[, c(
         "Term", "College", "Course", "Req_1", "Req_2", "Avg_fill_rate",
         "GEcapsize", "Avg_cap_diff",   "Crs_section_cnt",  "GE_avg_fill", "Rel_GE_fill_rate"
@@ -104,9 +104,9 @@ server <- function(input, output, session) {
   })
 
   # High fill rate courses table
-  output$highFillTable <- DT::renderDataTable({
+  output$highFillTable <- renderDataTable({
     df <- filteredData() %>% filter(Avg_fill_rate > input$highFillThreshold)
-    DT::datatable(
+    datatable(
       df[, c(
         "Term",  "Course", "Req_1", "Req_2", "Avg_fill_rate",   "GE_avg_fill", "Crs_section_cnt"  
       )],
@@ -117,9 +117,9 @@ server <- function(input, output, session) {
   })
 
   # Low Fill Rate Courses Table
-  output$lowFillTable <- DT::renderDataTable({
+  output$lowFillTable <- renderDataTable({
     df <- filteredData() %>% filter(Avg_fill_rate < input$lowFillThreshold)
-    DT::datatable(
+    datatable(
       df[, c(
         "Term",  "Course", "Req_1", "Req_2", "Avg_fill_rate",   "GE_avg_fill", "Crs_section_cnt"  
       )],
@@ -138,7 +138,6 @@ server <- function(input, output, session) {
         filter(Req_1 %in% areas) %>%
         droplevels() ##
 
-      # browser()           
 
       df_summary <- df_sub %>%
         group_by(Term, Req_1) %>%
@@ -155,7 +154,7 @@ server <- function(input, output, session) {
           x <- ge_areas[i]
           y <- ge_areas[j]
           model <- lm(df_summary[[y]] ~ df_summary[[x]])
-          model_summary <- broom::tidy(model)
+          model_summary <- tidy(model)
           r_squared <- summary(model)$r.squared
           r_val <- sqrt(r_squared) * sign(model_summary$estimate[2])
 
@@ -191,8 +190,8 @@ server <- function(input, output, session) {
   })
 
   # Render the Pairwise Correlation Results Table
-  output$pairwiseTable <- DT::renderDataTable({
-    DT::datatable(
+  output$pairwiseTable <- renderDataTable({
+    datatable(
       pairwiseResultsAll(),
       filter = "top",
       options = list(pageLength = 10, autoWidth = TRUE)
@@ -201,7 +200,7 @@ server <- function(input, output, session) {
 
 
   # GE Area Correlation Heatmap
-  output$correlationHeatmap <- renderPlot({
+  output$correlationHeatmap <- renderPlotly({
     # Summarize average fill rates per GE area per Term
     df_wide <- dataSource() %>%
       filter(!is.na(Req_1)) %>%
@@ -209,13 +208,19 @@ server <- function(input, output, session) {
       summarise(Avg_fill_rate = mean(Avg_fill_rate, na.rm = TRUE), .groups = "drop") %>%
       pivot_wider(names_from = Req_1, values_from = Avg_fill_rate)
 
+    # sample size (number of terms)
+    n_obs <- nrow(df_wide)
+    
     # Compute correlation matrix (excluding Term column)
     cor_mat <- cor(df_wide %>% select(-Term), use = "pairwise.complete.obs", method = "pearson")
 
     # Obtain melt correlation matrix for plotting
-    melted_cor <- reshape2::melt(cor_mat)
+    melted_cor <- melt(cor_mat)
 
-    ggplot(melted_cor, aes(Var1, Var2, fill = value)) +
+    
+    p<-ggplot(melted_cor, aes(Var1, Var2, fill = value, text = paste0(
+      " ", Var1, " <-> ", Var2, "<br>",
+      "Correlation: ", round(value, 2)  ))) +
       geom_tile(color = "white") +
       scale_fill_gradient2(
         low = "blue", high = "red", mid = "white",
@@ -228,10 +233,14 @@ server <- function(input, output, session) {
         axis.text.y = element_text(size = 14)
       ) +
       labs(
-        title = "GE Area Fill Rate Correlation Matrix Across Terms",
+        title = paste0("GE Area Fill Rate Correlation Matrix Across Terms (number of terms or sample size= ", n_obs, ")"),
         x = NULL,
         y = NULL
       )
+    
+    p2 <- ggplotly(p, tooltip = "text")
+    p2 <- layout(p2, hoverlabel = list(bgcolor = "white", font = list(color = "black")))
+    
   })
 
   
@@ -280,8 +289,8 @@ server <- function(input, output, session) {
   })
 
   # Render the Course-Level What-If Analysis Table
-  output$simTable <- DT::renderDataTable({
-    DT::datatable(
+  output$simTable <- renderDataTable({
+    datatable(
       simulatedData(),
       options = list(pageLength = 5, autoWidth = T ),
       rownames = FALSE
@@ -337,8 +346,8 @@ server <- function(input, output, session) {
   })
 
   # Render the GE Area-Level What-If Analysis Table
-  output$simGETable <- DT::renderDataTable({
-    DT::datatable(
+  output$simGETable <- renderDataTable({
+    datatable(
       simGEData(),
       options = list(pageLength = 5, autoWidth = T ),
       rownames = FALSE
@@ -346,22 +355,45 @@ server <- function(input, output, session) {
   })
 
   # Plot: Section Count vs. Average Fill Rate by Course
-  output$sectionVsFillPlot <- renderPlot({
+  output$sectionVsFillPlot <- renderPlotly({
     df <- filteredData()
 
     # Aggregate data to course level to summarize fill rates and section counts
     course_summary <- df %>%
       group_by(Course) %>%
       summarise(
+        Subject = sub("-.*", "", Course),  ##
         Avg_fill_rate = mean(Avg_fill_rate, na.rm = TRUE),
         Total_sections = sum(Crs_section_cnt, na.rm = TRUE),
         .groups = "drop"
       )
 
-    ggplot(course_summary, aes(x = Total_sections, y = Avg_fill_rate)) +
-      geom_point(alpha = 0.7, size = 3) +
-      geom_text_repel(aes(label = Course), size = 4) +
-      geom_smooth(method = "lm", se = FALSE, linetype = "dashed", color = "darkred") +
+    p <- ggplot(course_summary, aes(x = Total_sections, y = Avg_fill_rate)) +
+      geom_point(
+        aes(
+          text = paste0(
+            "Course: ", Course, "<br>",
+            "Subject: ", Subject, "<br>",
+            "Sections: ", Total_sections, "<br>",
+            "Fill Rate: ", round(Avg_fill_rate, 2)
+          ),
+          key = Subject
+        ),
+        color = "blue",
+        size = 1.2,
+        alpha = 0.5
+      ) +     
+      #geom_text_repel(aes(label = Course), size = 4) + # wont work with Plotly
+      #geom_text(aes(label = Course), size = 4, vjust = -1, check_overlap = TRUE)+
+      geom_text(
+        aes(
+          label = Course,
+          y = Avg_fill_rate + 0.025  # Nudges label higher
+        ),
+        size = 3,
+        check_overlap = TRUE
+      )+
+      geom_smooth(method = "lm", se = FALSE,  aes(group = 1), linetype = "dashed", color = "darkred") +
       labs(
         x = "Number of Sections",
         y = "Average Fill Rate",
@@ -374,6 +406,16 @@ server <- function(input, output, session) {
         axis.title.x      = element_text(size = 16),      
         axis.title.y      = element_text(size = 16)
       )
+    
+    p2 <- ggplotly(p, tooltip = "text", source = "sectionPlot")
+    event_register(p2, "plotly_click")
+    p2 <- layout(p2, hoverlabel = list(bgcolor = "white", font = list(color = "black")))
+    suppressWarnings(p2) 
+    # If not supressed, will get a warning that can happen with ggplot and Plotly. 
+    # This is because  ggplot() is used without Plotly loaded first or the plot is 
+    # is created as a ggplot object, not through ggplotly().
+    #
+
   })
 
 
@@ -436,7 +478,20 @@ server <- function(input, output, session) {
       )
   })
 
-
+  # set Overview’s subject filter but only when its toggled on
+    observeEvent(event_data("plotly_click", source = "sectionPlot"), {
+    req(input$linkClicks)
+    
+    clickData <- event_data("plotly_click", source = "sectionPlot")
+    
+    if (!is.null(clickData)) {
+      clicked_subject <- clickData$key
+      if (!is.null(clicked_subject)) {
+        updateSelectInput(session, "Subject", selected = clicked_subject)
+      }
+    }
+  })
+  
   # Populate the GE-area selector across all terms
   observe({
     df_all <- dataSource()
@@ -501,14 +556,29 @@ server <- function(input, output, session) {
 
   # Reset inputs when reset button is pressed
   observeEvent(input$resetBtn, {
+    
+    df <- dataSource()
+    
+    term_choices <- sort(unique(df$Term))
+    default_term <- tail(term_choices, 1)
+    
     updateSelectInput(session, "Term",
-                      choices  = unique(combinedData$Term),
-                      selected = tail(unique(combinedData$Term), 1)
+                      choices  = term_choices,
+                      selected = default_term
     )
     updateSelectInput(session, "GEreq",   selected = character(0))
     updateSelectInput(session, "College", selected = character(0))
     updateSelectInput(session, "Subject", selected = character(0))
-    updateSliderInput(session, "rateA", value = c(0, 1))
+    
+    df2 <- df %>% filter(Term %in% default_term)
+    maxAvg <- round(max(df2$Avg_fill_rate, na.rm = TRUE), 2)
+    
+    updateSliderInput(session, "rateA",
+                      min   = 0,
+                      max   = maxAvg,
+                      value = c(0, maxAvg),
+                      step  = 0.01)
   })
+  
   
 }

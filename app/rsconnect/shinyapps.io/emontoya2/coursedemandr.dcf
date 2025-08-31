@@ -1,0 +1,12 @@
+name: coursedemandr
+title: coursedemandr
+username: emontoya2
+account: emontoya2
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14763408
+bundleId: 10840868
+url: https://emontoya2.shinyapps.io/coursedemandr/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

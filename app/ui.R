@@ -76,7 +76,7 @@ ui <- fluidPage(
                        )
           ),
           h3("GE Courses"),
-          DT::dataTableOutput(outputId = "courseTable"),
+          dataTableOutput(outputId = "courseTable"),
           
           tags$hr(),    # Separate the “table” from the collapsible info
           #tags$br(),
@@ -162,7 +162,7 @@ ui <- fluidPage(
           step = 0.01
         ),
         h3("Courses with Average Rate below Threshold"),
-        DT::dataTableOutput(outputId = "lowFillTable")
+        dataTableOutput(outputId = "lowFillTable")
       )
     ),
     
@@ -179,59 +179,19 @@ ui <- fluidPage(
           step = 0.01
         ),
         h3("Courses with Average Rate above Threshold"),
-        DT::dataTableOutput(outputId = "highFillTable")
+        dataTableOutput(outputId = "highFillTable")
       )
     ),
     
     
-    # fill rate tabs
-    #tabPanel(
-    #  "High and Low Fill-Rate Courses",
-    #  fluidPage(
-    #    # Low Fill-Rate Courses (appear at top)
-    #    fluidRow(
-    #      column(
-    #        width = 12,           
-    #        numericInput(
-    #          inputId = "lowFillThreshold",
-    #          label   = "Low Fill Rate Threshold:",
-    #          value   = 0.25,
-    #          min     = 0,
-    #          max     = 1,
-    #          step    = 0.01
-    #        ),
-    #        h3("Courses ≤ Threshold"),
-    #        DT::dataTableOutput(outputId = "lowFillTable")
-    #      )
-    #    ),
-    #    
-    #    tags$br(),   
-    #    
-    #    # High Fill-Rate Courses 
-    #    fluidRow(
-    #      column(
-    #        width = 12,          
-    #        numericInput(
-    #          inputId = "highFillThreshold",
-    #          label   = "High Fill Rate Threshold:",
-    #          value   = 0.90,
-    #          min     = 0,
-    #          max     = 1,
-    #          step    = 0.01
-    #        ),
-    #        h3("Courses ≥ Threshold"),
-    #        DT::dataTableOutput(outputId = "highFillTable")
-    #      )
-    #    )
-    #  )
-    #),
- 
-    
+
     # Section Count vs. Fill Rate Tab
     tabPanel(
       "Section Count vs. Fill Rate",
       fluidPage(
         h3("Relationship Between Number of Sections and Fill Rate"),
+        checkboxInput("linkClicks", "Enable 'click‑to‑filter' (click a point to filter Overview by its Subject)",value= FALSE, width="95%"),
+        
         bsCollapsePanel(
           title = "Trend Information",
           tags$div(
@@ -259,7 +219,7 @@ ui <- fluidPage(
           ),
           style = "primary"
         ),
-        plotOutput(outputId = "sectionVsFillPlot", height = "500px")
+        plotlyOutput(outputId = "sectionVsFillPlot", height = "500px")
       )
     ),
     
@@ -282,7 +242,7 @@ ui <- fluidPage(
           ),
           style = "primary"
         ),
-        DT::dataTableOutput(outputId = "pairwiseTable")
+        dataTableOutput(outputId = "pairwiseTable")
       )
     ),
 
@@ -291,7 +251,7 @@ ui <- fluidPage(
       "GE Area Correlation Heatmap",
       fluidPage(
         h3("Correlation of GE Area Fill Rates -- across all Terms"),
-        plotOutput(outputId = "correlationHeatmap", height = "700px")
+        plotlyOutput(outputId = "correlationHeatmap", height = "700px")
       )
     ),
 
@@ -340,7 +300,7 @@ ui <- fluidPage(
           column(
             width = 12,
             h3("Course-Level What-If Results (Most Recent Term)"),
-            DT::dataTableOutput(outputId = "simTable")
+            dataTableOutput(outputId = "simTable")
           )
         ),
         
@@ -387,7 +347,7 @@ ui <- fluidPage(
           column(
             width = 12,
             h3("GE Area-Level What-If Results (Most Recent Term)"),
-            DT::dataTableOutput(outputId = "simGETable")
+            dataTableOutput(outputId = "simGETable")
           )
         )
       )

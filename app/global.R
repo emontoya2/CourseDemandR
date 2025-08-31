@@ -9,6 +9,8 @@ library(tidyr)
 library(broom)
 library(ggrepel)
 library(reshape2)
+library(plotly)
+
 
 # Load data
 combinedData <- read.csv("data/GEsampledata.csv", stringsAsFactors = FALSE)
@@ -34,3 +36,4 @@ prepData <- function(df) {
     mutate(GE_course_level = if_else(Catalog < 3000, "LD", "UD")) %>%
     mutate(across(where(is.character), as.factor))
 }
+
