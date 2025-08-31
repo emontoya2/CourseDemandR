@@ -1,4 +1,4 @@
-> **Version**: v1.3.2  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.15637017](https://doi.org/10.5281/zenodo.15637017)
+> **Version**: v1.3.2  •  **License**: [MIT](LICENSE)  •  **Zenodo Archive**: [10.5281/zenodo.17010174](https://doi.org/10.5281/zenodo.17010174)
 
 # CourseDemandR
  
@@ -19,7 +19,7 @@
 
 ### Notes
 
-This version builds on v1.3.1 by adding interactive diagnostics and cross-panel linking. It does not change the app’s required input structure.
+This version builds on v1.3.1 by adding interactive tooltips and cross-tab filtering. It does not alter the app’s required input structure.
 
 ## Local Deployment of **CourseDemandR**
 
@@ -97,4 +97,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E.L. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning (v1.3.2). Zenodo. https://doi.org/10.5281/zenodo.15637017
+Montoya, E.L. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning (v1.3.2). Zenodo. https://doi.org/10.5281/zenodo.17010174
