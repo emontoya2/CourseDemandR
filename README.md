@@ -97,4 +97,4 @@ A sample dataset is included with this release for demonstration.
 
 ## Citation
 
-Montoya, E.L. (2025). CourseDemandR: An R Shiny App for General Education Curriculum Planning (v1.3.2). Zenodo. https://doi.org/10.5281/zenodo.17010174
+Montoya, E. L. (2025). CourseDemandR: A statistical analysis and scenario-based planning tool for general education curriculum planning. *SoftwareX*, 32, 102412.
